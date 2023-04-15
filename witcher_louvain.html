@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 1000px;
+                 height: 800px;
+                 background-color: #222222;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"betweenness_centrality": 0.8381351981351977, "closeness_centrality": 0.7764705882352941, "degree_centrality": 0.7424242424242424, "font": {"color": "grey"}, "group": 0, "id": "Geralt", "label": "Geralt", "shape": "dot", "size": 49}, {"betweenness_centrality": 0.0006604506604506603, "closeness_centrality": 0.4647887323943662, "degree_centrality": 0.12121212121212122, "font": {"color": "grey"}, "group": 1, "id": "Niedamir", "label": "Niedamir", "shape": "dot", "size": 8}, {"betweenness_centrality": 0.0006604506604506603, "closeness_centrality": 0.4647887323943662, "degree_centrality": 0.12121212121212122, "font": {"color": "grey"}, "group": 1, "id": "Eyck", "label": "Eyck", "shape": "dot", "size": 8}, {"betweenness_centrality": 0.0, "closeness_centrality": 0.4583333333333333, "degree_centrality": 0.09090909090909091, "font": {"color": "grey"}, "group": 1, "id": "Dorregaray", "label": "Dorregaray", "shape": "dot", "size": 6}, {"betweenness_centrality": 0.00018648018648018648, "closeness_centrality": 0.46153846153846156, "degree_centrality": 0.10606060606060606, "font": {"color": "grey"}, "group": 1, "id": "Yarpen", "label": "Yarpen", "shape": "dot", "size": 7}, {"betweenness_centrality": 0.00038073038073038073, "closeness_centrality": 0.4647887323943662, "degree_centrality": 0.12121212121212122, "font": {"color": "grey"}, "group": 1, "id": "Gyllenstiern", "label": "Gyllenstiern", "shape": "dot", "size": 8}, {"betweenness_centrality": 0.03068376068376068, "closeness_centrality": 0.46808510638297873, "degree_centrality": 0.13636363636363635, "font": {"color": "grey"}, "group": 1, "id": "Boholt", "label": "Boholt", "shape": "dot", "size": 9}, {"betweenness_centrality": 0.0, "closeness_centrality": 0.45517241379310347, "degree_centrality": 0.07575757575757576, "font": {"color": "grey"}, "group": 1, "id": "Kennet", "label": "Kennet", "shape": "dot", "size": 5}, {"betweenness_centrality": 0.013317793317793317, "closeness_centrality": 0.4852941176470588, "degree_centrality": 0.21212121212121213, "font": {"color": "grey"}, "group": 1, "id": "Yennefer", "label": "Yennefer", "shape": "dot", "size": 14}, {"betweenness_centrality": 0.0, "closeness_centrality": 0.4489795918367347, "degree_centrality": 0.06060606060606061, "font": {"color": "grey"}, "group": 1, "id": "Villentretenmerth", "label": "Villentretenmerth", "shape": "dot", "size": 4}, {"betweenness_centrality": 0.0, "closeness_centrality": 0.4429530201342282, "degree_centrality": 0.030303030303030304, "font": {"color": "grey"}, "group": 0, "id": "Herbolth", "label": "Herbolth", "shape": "dot", "size": 2}, {"betweenness_centrality": 0.0, "closeness_centrality": 0.44, "degree_centrality": 0.015151515151515152, "font": {"color": "grey"}, "group": 0, "id": "Ivo", "label": "Ivo", "shape": "dot", "size": 1}, {"betweenness_centrality": 0.0002331002331002331, "closeness_centrality": 0.44594594594594594, "degree_centrality": 0.045454545454545456, "font": {"color": "grey"}, "group": 0, "id": "Istredd", "label": "Istredd", "shape": "dot", "size": 3}, {"betweenness_centrality": 0.0016705516705516703, "closeness_centrality": 0.46808510638297873, "degree_centrality": 0.06060606060606061, "font": {"color": "grey"}, "group": 3, "id": "Two", "label": "Two", "shape": "dot", "size": 4}, {"betweenness_centrality": 0.06581196581196581, "closeness_centrality": 0.4852941176470588, "degree_centrality": 0.15151515151515152, "font": {"color": "grey"}, "group": 5, "id": "Dandelion", "label": "Dandelion", "shape": "dot", "size": 10}, {"betweenness_centrality": 0.03294483294483294, "closeness_centrality": 0.4782608695652174, "degree_centrality": 0.10606060606060606, "font": {"color": "grey"}, "group": 5, "id": "Dainty", "label": "Dainty", "shape": "dot", "size": 7}, {"betweenness_centrality": 0.07288267288267289, "closeness_centrality": 0.4647887323943662, "degree_centrality": 0.07575757575757576, "font": {"color": "grey"}, "group": 5, "id": "Vimme", "label": "Vimme", "shape": "dot", "size": 5}, {"betweenness_centrality": 0.0, "closeness_centrality": 0.4583333333333333, "degree_centrality": 0.045454545454545456, "font": {"color": "grey"}, "group": 5, "id": "Vespula", "label": "Vespula", "shape": "dot", "size": 3}, {"betweenness_centrality": 0.0, "closeness_centrality": 0.4583333333333333, "degree_centrality": 0.045454545454545456, "font": {"color": "grey"}, "group": 5, "id": "Dudu", "label": "Dudu", "shape": "dot", "size": 3}, {"betweenness_centrality": 0.0, "closeness_centrality": 0.4489795918367347, "degree_centrality": 0.06060606060606061, "font": {"color": "grey"}, "group": 6, "id": "Sh\u0027eenaz", "label": "Sh\u0027eenaz", "shape": "dot", "size": 4}, {"betweenness_centrality": 0.040559440559440565, "closeness_centrality": 0.4520547945205479, "degree_centrality": 0.030303030303030304, "font": {"color": "grey"}, "group": 4, "id": "Teleri", "label": "Teleri", "shape": "dot", "size": 2}, {"betweenness_centrality": 0.009401709401709401, "closeness_centrality": 0.4782608695652174, "degree_centrality": 0.13636363636363635, "font": {"color": "grey"}, "group": 6, "id": "Essi", "label": "Essi", "shape": "dot", "size": 9}, {"betweenness_centrality": 0.0, "closeness_centrality": 0.4520547945205479, "degree_centrality": 0.030303030303030304, "font": {"color": "grey"}, "group": 5, "id": "Gerard", "label": "Gerard", "shape": "dot", "size": 2}, {"betweenness_centrality": 0.0013986013986013986, "closeness_centrality": 0.4647887323943662, "degree_centrality": 0.09090909090909091, "font": {"color": "grey"}, "group": 6, "id": "Agloval", "label": "Agloval", "shape": "dot", "size": 6}, {"betweenness_centrality": 0.0, "closeness_centrality": 0.4583333333333333, "degree_centrality": 0.06060606060606061, "font": {"color": "grey"}, "group": 6, "id": "Zelest", "label": "Zelest", "shape": "dot", "size": 4}, {"betweenness_centrality": 0.030303030303030304, "closeness_centrality": 0.4489795918367347, "degree_centrality": 0.045454545454545456, "font": {"color": "grey"}, "group": 6, "id": "Akeretta", "label": "Akeretta", "shape": "dot", "size": 3}, {"betweenness_centrality": 0.0, "closeness_centrality": 0.4429530201342282, "degree_centrality": 0.030303030303030304, "font": {"color": "grey"}, "group": 6, "id": "Duke", "label": "Duke", "shape": "dot", "size": 2}, {"betweenness_centrality": 0.0, "closeness_centrality": 0.44, "degree_centrality": 0.015151515151515152, "font": {"color": "grey"}, "group": 0, "id": "Ethain", "label": "Ethain", "shape": "dot", "size": 1}, {"betweenness_centrality": 0.0, "closeness_centrality": 0.44, "degree_centrality": 0.015151515151515152, "font": {"color": "grey"}, "group": 0, "id": "Juan", "label": "Juan", "shape": "dot", "size": 1}, {"betweenness_centrality": 0.0, "closeness_centrality": 0.4429530201342282, "degree_centrality": 0.030303030303030304, "font": {"color": "grey"}, "group": 6, "id": "Cynthia", "label": "Cynthia", "shape": "dot", "size": 2}, {"betweenness_centrality": 0.032867132867132866, "closeness_centrality": 0.46808510638297873, "degree_centrality": 0.09090909090909091, "font": {"color": "grey"}, "group": 0, "id": "Braenn", "label": "Braenn", "shape": "dot", "size": 6}, {"betweenness_centrality": 0.0, "closeness_centrality": 0.44594594594594594, "degree_centrality": 0.030303030303030304, "font": {"color": "grey"}, "group": 0, "id": "Voymir", "label": "Voymir", "shape": "dot", "size": 2}, {"betweenness_centrality": 0.08069930069930067, "closeness_centrality": 0.5116279069767442, "degree_centrality": 0.21212121212121213, "font": {"color": "grey"}, "group": 2, "id": "Ciri", "label": "Ciri", "shape": "dot", "size": 14}, {"betweenness_centrality": 0.0, "closeness_centrality": 0.4520547945205479, "degree_centrality": 0.030303030303030304, "font": {"color": "grey"}, "group": 2, "id": "Kistrin", "label": "Kistrin", "shape": "dot", "size": 2}, {"betweenness_centrality": 0.0, "closeness_centrality": 0.44, "degree_centrality": 0.015151515151515152, "font": {"color": "grey"}, "group": 0, "id": "Cirilla", "label": "Cirilla", "shape": "dot", "size": 1}, {"betweenness_centrality": 0.013364413364413366, "closeness_centrality": 0.4647887323943662, "degree_centrality": 0.07575757575757576, "font": {"color": "grey"}, "group": 2, "id": "Ervyll", "label": "Ervyll", "shape": "dot", "size": 5}, {"betweenness_centrality": 0.0, "closeness_centrality": 0.4520547945205479, "degree_centrality": 0.030303030303030304, "font": {"color": "grey"}, "group": 2, "id": "Freixenet", "label": "Freixenet", "shape": "dot", "size": 2}, {"betweenness_centrality": 0.024926184926184924, "closeness_centrality": 0.46808510638297873, "degree_centrality": 0.09090909090909091, "font": {"color": "grey"}, "group": 2, "id": "Venzlav", "label": "Venzlav", "shape": "dot", "size": 6}, {"betweenness_centrality": 0.0, "closeness_centrality": 0.4520547945205479, "degree_centrality": 0.030303030303030304, "font": {"color": "grey"}, "group": 2, "id": "Morenn", "label": "Morenn", "shape": "dot", "size": 2}, {"betweenness_centrality": 0.012960372960372963, "closeness_centrality": 0.4520547945205479, "degree_centrality": 0.045454545454545456, "font": {"color": "grey"}, "group": 2, "id": "Viraxas", "label": "Viraxas", "shape": "dot", "size": 3}, {"betweenness_centrality": 0.0, "closeness_centrality": 0.44594594594594594, "degree_centrality": 0.030303030303030304, "font": {"color": "grey"}, "group": 2, "id": "Junghans", "label": "Junghans", "shape": "dot", "size": 2}, {"betweenness_centrality": 0.008407148407148412, "closeness_centrality": 0.4647887323943662, "degree_centrality": 0.07575757575757576, "font": {"color": "grey"}, "group": 2, "id": "Levecque", "label": "Levecque", "shape": "dot", "size": 5}, {"betweenness_centrality": 0.0, "closeness_centrality": 0.4520547945205479, "degree_centrality": 0.030303030303030304, "font": {"color": "grey"}, "group": 2, "id": "Mousesack", "label": "Mousesack", "shape": "dot", "size": 2}, {"betweenness_centrality": 0.0, "closeness_centrality": 0.4520547945205479, "degree_centrality": 0.030303030303030304, "font": {"color": "grey"}, "group": 2, "id": "Pavetta", "label": "Pavetta", "shape": "dot", "size": 2}, {"betweenness_centrality": 0.09001554001554002, "closeness_centrality": 0.4782608695652174, "degree_centrality": 0.09090909090909091, "font": {"color": "grey"}, "group": 3, "id": "Yurga", "label": "Yurga", "shape": "dot", "size": 6}, {"betweenness_centrality": 0.0, "closeness_centrality": 0.4429530201342282, "degree_centrality": 0.030303030303030304, "font": {"color": "grey"}, "group": 0, "id": "Visenna", "label": "Visenna", "shape": "dot", "size": 2}, {"betweenness_centrality": 0.0004662004662004662, "closeness_centrality": 0.4489795918367347, "degree_centrality": 0.045454545454545456, "font": {"color": "grey"}, "group": 0, "id": "Vesemir", "label": "Vesemir", "shape": "dot", "size": 3}, {"betweenness_centrality": 0.0, "closeness_centrality": 0.44, "degree_centrality": 0.015151515151515152, "font": {"color": "grey"}, "group": 0, "id": "Lytta", "label": "Lytta", "shape": "dot", "size": 1}, {"betweenness_centrality": 0.0, "closeness_centrality": 0.44, "degree_centrality": 0.015151515151515152, "font": {"color": "grey"}, "group": 0, "id": "Gorazd", "label": "Gorazd", "shape": "dot", "size": 1}, {"betweenness_centrality": 0.0, "closeness_centrality": 0.4520547945205479, "degree_centrality": 0.030303030303030304, "font": {"color": "grey"}, "group": 3, "id": "Roach", "label": "Roach", "shape": "dot", "size": 2}, {"betweenness_centrality": 0.0, "closeness_centrality": 0.32038834951456313, "degree_centrality": 0.015151515151515152, "font": {"color": "grey"}, "group": 1, "id": "Crinfrid", "label": "Crinfrid", "shape": "dot", "size": 1}, {"betweenness_centrality": 0.0, "closeness_centrality": 0.336734693877551, "degree_centrality": 0.030303030303030304, "font": {"color": "grey"}, "group": 5, "id": "Pike", "label": "Pike", "shape": "dot", "size": 2}, {"betweenness_centrality": 0.01818181818181818, "closeness_centrality": 0.3350253807106599, "degree_centrality": 0.030303030303030304, "font": {"color": "grey"}, "group": 4, "id": "Mestvin", "label": "Mestvin", "shape": "dot", "size": 2}, {"betweenness_centrality": 0.0, "closeness_centrality": 0.33, "degree_centrality": 0.030303030303030304, "font": {"color": "grey"}, "group": 5, "id": "Sulimir", "label": "Sulimir", "shape": "dot", "size": 2}, {"betweenness_centrality": 0.0, "closeness_centrality": 0.3188405797101449, "degree_centrality": 0.015151515151515152, "font": {"color": "grey"}, "group": 5, "id": "Ther", "label": "Ther", "shape": "dot", "size": 1}, {"betweenness_centrality": 0.0, "closeness_centrality": 0.3188405797101449, "degree_centrality": 0.015151515151515152, "font": {"color": "grey"}, "group": 5, "id": "Rhundurin", "label": "Rhundurin", "shape": "dot", "size": 1}, {"betweenness_centrality": 0.01227661227661228, "closeness_centrality": 0.3188405797101449, "degree_centrality": 0.030303030303030304, "font": {"color": "grey"}, "group": 4, "id": "Gaspard", "label": "Gaspard", "shape": "dot", "size": 2}, {"betweenness_centrality": 0.0010878010878010876, "closeness_centrality": 0.2558139534883721, "degree_centrality": 0.030303030303030304, "font": {"color": "grey"}, "group": 4, "id": "Dalia", "label": "Dalia", "shape": "dot", "size": 2}, {"betweenness_centrality": 0.0, "closeness_centrality": 0.3113207547169811, "degree_centrality": 0.015151515151515152, "font": {"color": "grey"}, "group": 6, "id": "Veverka", "label": "Veverka", "shape": "dot", "size": 1}, {"betweenness_centrality": 0.0, "closeness_centrality": 0.32038834951456313, "degree_centrality": 0.015151515151515152, "font": {"color": "grey"}, "group": 0, "id": "Mona", "label": "Mona", "shape": "dot", "size": 1}, {"betweenness_centrality": 0.0, "closeness_centrality": 0.3402061855670103, "degree_centrality": 0.015151515151515152, "font": {"color": "grey"}, "group": 2, "id": "Alvina", "label": "Alvina", "shape": "dot", "size": 1}, {"betweenness_centrality": 0.0002331002331002331, "closeness_centrality": 0.34554973821989526, "degree_centrality": 0.030303030303030304, "font": {"color": "grey"}, "group": 2, "id": "Baron", "label": "Baron", "shape": "dot", "size": 2}, {"betweenness_centrality": 0.0, "closeness_centrality": 0.3492063492063492, "degree_centrality": 0.045454545454545456, "font": {"color": "grey"}, "group": 2, "id": "Brick", "label": "Brick", "shape": "dot", "size": 3}, {"betweenness_centrality": 0.00024864024864024864, "closeness_centrality": 0.3235294117647059, "degree_centrality": 0.030303030303030304, "font": {"color": "grey"}, "group": 2, "id": "Ekkehard", "label": "Ekkehard", "shape": "dot", "size": 2}, {"betweenness_centrality": 0.0, "closeness_centrality": 0.3251231527093596, "degree_centrality": 0.015151515151515152, "font": {"color": "grey"}, "group": 3, "id": "Atlan", "label": "Atlan", "shape": "dot", "size": 1}, {"betweenness_centrality": 0.030303030303030304, "closeness_centrality": 0.3283582089552239, "degree_centrality": 0.030303030303030304, "font": {"color": "grey"}, "group": 3, "id": "Sulik", "label": "Sulik", "shape": "dot", "size": 2}, {"betweenness_centrality": 0.0, "closeness_centrality": 0.24812030075187969, "degree_centrality": 0.015151515151515152, "font": {"color": "grey"}, "group": 3, "id": "Nadbor", "label": "Nadbor", "shape": "dot", "size": 1}]);
+                  edges = new vis.DataSet([{"count": 52, "from": "Geralt", "to": "Niedamir", "width": 1}, {"count": 51, "from": "Geralt", "to": "Eyck", "width": 1}, {"count": 30, "from": "Geralt", "to": "Dorregaray", "width": 1}, {"count": 24, "from": "Geralt", "to": "Yarpen", "width": 1}, {"count": 32, "from": "Geralt", "to": "Gyllenstiern", "width": 1}, {"count": 39, "from": "Geralt", "to": "Boholt", "width": 1}, {"count": 2, "from": "Geralt", "to": "Kennet", "width": 1}, {"count": 350, "from": "Geralt", "to": "Yennefer", "width": 1}, {"count": 20, "from": "Geralt", "to": "Villentretenmerth", "width": 1}, {"count": 23, "from": "Geralt", "to": "Herbolth", "width": 1}, {"count": 4, "from": "Geralt", "to": "Ivo", "width": 1}, {"count": 58, "from": "Geralt", "to": "Istredd", "width": 1}, {"count": 15, "from": "Geralt", "to": "Two", "width": 1}, {"count": 100, "from": "Geralt", "to": "Dandelion", "width": 1}, {"count": 133, "from": "Geralt", "to": "Dainty", "width": 1}, {"count": 8, "from": "Geralt", "to": "Vimme", "width": 1}, {"count": 19, "from": "Geralt", "to": "Vespula", "width": 1}, {"count": 18, "from": "Geralt", "to": "Dudu", "width": 1}, {"count": 54, "from": "Geralt", "to": "Sh\u0027eenaz", "width": 1}, {"count": 8, "from": "Geralt", "to": "Teleri", "width": 1}, {"count": 230, "from": "Geralt", "to": "Essi", "width": 1}, {"count": 1, "from": "Geralt", "to": "Gerard", "width": 1}, {"count": 8, "from": "Geralt", "to": "Agloval", "width": 1}, {"count": 2, "from": "Geralt", "to": "Zelest", "width": 1}, {"count": 9, "from": "Geralt", "to": "Akeretta", "width": 1}, {"count": 5, "from": "Geralt", "to": "Duke", "width": 1}, {"count": 4, "from": "Geralt", "to": "Ethain", "width": 1}, {"count": 5, "from": "Geralt", "to": "Juan", "width": 1}, {"count": 5, "from": "Geralt", "to": "Cynthia", "width": 1}, {"count": 135, "from": "Geralt", "to": "Braenn", "width": 1}, {"count": 5, "from": "Geralt", "to": "Voymir", "width": 1}, {"count": 211, "from": "Geralt", "to": "Ciri", "width": 1}, {"count": 20, "from": "Geralt", "to": "Kistrin", "width": 1}, {"count": 4, "from": "Geralt", "to": "Cirilla", "width": 1}, {"count": 5, "from": "Geralt", "to": "Ervyll", "width": 1}, {"count": 4, "from": "Geralt", "to": "Freixenet", "width": 1}, {"count": 28, "from": "Geralt", "to": "Venzlav", "width": 1}, {"count": 13, "from": "Geralt", "to": "Morenn", "width": 1}, {"count": 4, "from": "Geralt", "to": "Viraxas", "width": 1}, {"count": 6, "from": "Geralt", "to": "Junghans", "width": 1}, {"count": 31, "from": "Geralt", "to": "Levecque", "width": 1}, {"count": 26, "from": "Geralt", "to": "Mousesack", "width": 1}, {"count": 33, "from": "Geralt", "to": "Pavetta", "width": 1}, {"count": 72, "from": "Geralt", "to": "Yurga", "width": 1}, {"count": 18, "from": "Geralt", "to": "Visenna", "width": 1}, {"count": 5, "from": "Geralt", "to": "Vesemir", "width": 1}, {"count": 9, "from": "Geralt", "to": "Lytta", "width": 1}, {"count": 8, "from": "Geralt", "to": "Gorazd", "width": 1}, {"count": 8, "from": "Geralt", "to": "Roach", "width": 1}, {"count": 21, "from": "Niedamir", "to": "Boholt", "width": 1}, {"count": 19, "from": "Niedamir", "to": "Yennefer", "width": 1}, {"count": 38, "from": "Niedamir", "to": "Gyllenstiern", "width": 1}, {"count": 21, "from": "Niedamir", "to": "Yarpen", "width": 1}, {"count": 28, "from": "Niedamir", "to": "Dorregaray", "width": 1}, {"count": 26, "from": "Niedamir", "to": "Eyck", "width": 1}, {"count": 4, "from": "Niedamir", "to": "Villentretenmerth", "width": 1}, {"count": 17, "from": "Eyck", "to": "Dorregaray", "width": 1}, {"count": 14, "from": "Eyck", "to": "Yennefer", "width": 1}, {"count": 22, "from": "Eyck", "to": "Yarpen", "width": 1}, {"count": 13, "from": "Eyck", "to": "Boholt", "width": 1}, {"count": 6, "from": "Eyck", "to": "Villentretenmerth", "width": 1}, {"count": 16, "from": "Eyck", "to": "Gyllenstiern", "width": 1}, {"count": 44, "from": "Dorregaray", "to": "Yennefer", "width": 1}, {"count": 6, "from": "Dorregaray", "to": "Gyllenstiern", "width": 1}, {"count": 17, "from": "Dorregaray", "to": "Boholt", "width": 1}, {"count": 88, "from": "Yennefer", "to": "Yarpen", "width": 1}, {"count": 19, "from": "Yennefer", "to": "Gyllenstiern", "width": 1}, {"count": 54, "from": "Yennefer", "to": "Boholt", "width": 1}, {"count": 6, "from": "Yennefer", "to": "Kennet", "width": 1}, {"count": 13, "from": "Yennefer", "to": "Villentretenmerth", "width": 1}, {"count": 53, "from": "Yennefer", "to": "Istredd", "width": 1}, {"count": 2, "from": "Yennefer", "to": "Two", "width": 1}, {"count": 19, "from": "Yennefer", "to": "Essi", "width": 1}, {"count": 6, "from": "Yennefer", "to": "Agloval", "width": 1}, {"count": 5, "from": "Yennefer", "to": "Sh\u0027eenaz", "width": 1}, {"count": 34, "from": "Yarpen", "to": "Boholt", "width": 1}, {"count": 5, "from": "Yarpen", "to": "Gyllenstiern", "width": 1}, {"count": 6, "from": "Yarpen", "to": "Kennet", "width": 1}, {"count": 1, "from": "Gyllenstiern", "to": "Boholt", "width": 1}, {"count": 5, "from": "Gyllenstiern", "to": "Kennet", "width": 1}, {"count": 8, "from": "Boholt", "to": "Kennet", "width": 1}, {"count": 6, "from": "Boholt", "to": "Crinfrid", "width": 1}, {"count": 9, "from": "Istredd", "to": "Herbolth", "width": 1}, {"count": 3, "from": "Two", "to": "Ciri", "width": 1}, {"count": 5, "from": "Two", "to": "Yurga", "width": 1}, {"count": 6, "from": "Dandelion", "to": "Pike", "width": 1}, {"count": 10, "from": "Dandelion", "to": "Vespula", "width": 1}, {"count": 36, "from": "Dandelion", "to": "Dainty", "width": 1}, {"count": 6, "from": "Dandelion", "to": "Dudu", "width": 1}, {"count": 6, "from": "Dandelion", "to": "Agloval", "width": 1}, {"count": 5, "from": "Dandelion", "to": "Mestvin", "width": 1}, {"count": 51, "from": "Dandelion", "to": "Essi", "width": 1}, {"count": 3, "from": "Dandelion", "to": "Gerard", "width": 1}, {"count": 5, "from": "Dandelion", "to": "Zelest", "width": 1}, {"count": 10, "from": "Pike", "to": "Dainty", "width": 1}, {"count": 33, "from": "Dainty", "to": "Vimme", "width": 1}, {"count": 10, "from": "Dainty", "to": "Sulimir", "width": 1}, {"count": 6, "from": "Dainty", "to": "Vespula", "width": 1}, {"count": 12, "from": "Dainty", "to": "Dudu", "width": 1}, {"count": 5, "from": "Vimme", "to": "Ther", "width": 1}, {"count": 1, "from": "Vimme", "to": "Sulimir", "width": 1}, {"count": 6, "from": "Vimme", "to": "Rhundurin", "width": 1}, {"count": 9, "from": "Sh\u0027eenaz", "to": "Essi", "width": 1}, {"count": 13, "from": "Sh\u0027eenaz", "to": "Agloval", "width": 1}, {"count": 33, "from": "Agloval", "to": "Essi", "width": 1}, {"count": 3, "from": "Agloval", "to": "Zelest", "width": 1}, {"count": 5, "from": "Gaspard", "to": "Teleri", "width": 1}, {"count": 6, "from": "Gaspard", "to": "Dalia", "width": 1}, {"count": 6, "from": "Dalia", "to": "Mestvin", "width": 1}, {"count": 5, "from": "Essi", "to": "Duke", "width": 1}, {"count": 2, "from": "Essi", "to": "Akeretta", "width": 1}, {"count": 4, "from": "Essi", "to": "Zelest", "width": 1}, {"count": 4, "from": "Essi", "to": "Cynthia", "width": 1}, {"count": 5, "from": "Akeretta", "to": "Veverka", "width": 1}, {"count": 60, "from": "Braenn", "to": "Ciri", "width": 1}, {"count": 6, "from": "Braenn", "to": "Ervyll", "width": 1}, {"count": 6, "from": "Braenn", "to": "Voymir", "width": 1}, {"count": 6, "from": "Braenn", "to": "Vesemir", "width": 1}, {"count": 22, "from": "Braenn", "to": "Mona", "width": 1}, {"count": 31, "from": "Ciri", "to": "Kistrin", "width": 1}, {"count": 2, "from": "Ciri", "to": "Alvina", "width": 1}, {"count": 6, "from": "Ciri", "to": "Freixenet", "width": 1}, {"count": 5, "from": "Ciri", "to": "Morenn", "width": 1}, {"count": 9, "from": "Ciri", "to": "Pavetta", "width": 1}, {"count": 5, "from": "Ciri", "to": "Baron", "width": 1}, {"count": 6, "from": "Ciri", "to": "Venzlav", "width": 1}, {"count": 15, "from": "Ciri", "to": "Levecque", "width": 1}, {"count": 5, "from": "Ciri", "to": "Brick", "width": 1}, {"count": 13, "from": "Ciri", "to": "Mousesack", "width": 1}, {"count": 4, "from": "Ciri", "to": "Yurga", "width": 1}, {"count": 5, "from": "Ervyll", "to": "Baron", "width": 1}, {"count": 5, "from": "Ervyll", "to": "Venzlav", "width": 1}, {"count": 6, "from": "Ervyll", "to": "Viraxas", "width": 1}, {"count": 3, "from": "Vesemir", "to": "Visenna", "width": 1}, {"count": 5, "from": "Venzlav", "to": "Ekkehard", "width": 1}, {"count": 2, "from": "Venzlav", "to": "Brick", "width": 1}, {"count": 6, "from": "Venzlav", "to": "Levecque", "width": 1}, {"count": 5, "from": "Ekkehard", "to": "Viraxas", "width": 1}, {"count": 19, "from": "Junghans", "to": "Levecque", "width": 1}, {"count": 6, "from": "Brick", "to": "Levecque", "width": 1}, {"count": 2, "from": "Yurga", "to": "Atlan", "width": 1}, {"count": 17, "from": "Yurga", "to": "Roach", "width": 1}, {"count": 3, "from": "Yurga", "to": "Sulik", "width": 1}, {"count": 5, "from": "Nadbor", "to": "Sulik", "width": 1}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>
